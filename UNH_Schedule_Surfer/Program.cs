@@ -21,7 +21,7 @@ namespace UNH_Schedule_Surfer
             Console.WriteLine($"{rowCount} by {colCount} grid");
 
 
-            Console.WriteLine(xlRange[6][5].Value);
+            Console.WriteLine(xlRange[6][5].Value); 
 
 
 
