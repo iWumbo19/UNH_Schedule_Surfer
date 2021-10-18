@@ -55,7 +55,7 @@ namespace SurferUI
         private void FilePathBox_TextChanged(object sender, EventArgs e)
         {
             XLData.filePath = FilePathBox.Text;
-            XLData.ChangeSpreadSheet();
+            //XLData.ChangeSpreadSheet();
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
