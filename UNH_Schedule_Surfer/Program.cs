@@ -11,6 +11,7 @@ namespace UNH_Schedule_Surfer
         static void Main(string[] args)
         {
             Program pgm = new();
+            
             Console.WriteLine("Opening Spreadsheet");
             //Opens Spreadsheet
             string filePath = Path.Combine(Environment.CurrentDirectory, "schedule.xlsx");
