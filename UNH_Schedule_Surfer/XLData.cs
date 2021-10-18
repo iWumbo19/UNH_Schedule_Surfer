@@ -3,105 +3,159 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Excel = Microsoft.Office.Interop.Excel;
+using ClosedXML.Excel;
+
 
 
 namespace UNH_Schedule_Surfer
 {
     static public class XLData
     {
-        static public Excel.Worksheet wks;
         static public int rowCount;
         static public int colCount;
-        static public Excel.Range xlRange;
         static public List<string> bldgCodes;
-        static public List<List<string>> roomCodes;
+        static public IXLWorksheet data;
+        static public List<string> daysOfWeek = new()
+        {
+            {"M"},
+            {"T"},
+            {"W"},
+            {"R"},
+            {"F"},
+            {"S"},
+            {"U"},
+
+        };
+
 
         static public List<string> GatherBldgCodes()
         {
-            List<string> bldgCodes = new List<string>();
-            for (int i = 2; i < XLData.rowCount; i++)
+            List<string> outputList = new();
+            for (int row = 2; row < rowCount; row++)
             {
-                string item = XLData.xlRange[2][i].Value;
-                if (!bldgCodes.Contains(item)) { bldgCodes.Add(item); }
-            }
-            return bldgCodes;
-        }
-
-        static public List<string> GatherRoomCodes(string bldg)
-        {
-            List<string> roomCodes = new List<string>();
-            for (int i = 2; i < XLData.rowCount; i++)
-            {
-                string item = XLData.xlRange[4][i].Value;
-                if (XLData.xlRange[2][i].Value == bldg && !roomCodes.Contains(item)) { roomCodes.Add(item); }
-            }
-            return roomCodes;
-        }
-
-        static public List<string> GatherBeginTimes(string bldg, string room)
-        {
-            List<string> beginTimes = new List<string>();
-            for (int i = 2; i < XLData.rowCount; i++)
-            {
-                string item = XLData.xlRange[6][i].Value;
-                if (!beginTimes.Contains(item) &&
-                    XLData.xlRange[4][i].Value == room &&
-                    XLData.xlRange[2][i].Value == bldg)
-                { beginTimes.Add(item); }
-            }
-            return beginTimes;
-        }
-
-        static public List<string> GatherEndTimes(string bldg, string room)
-        {
-            List<string> endTimes = new List<string>();
-            for (int i = 2; i < XLData.rowCount; i++)
-            {
-                string item = XLData.xlRange[4][i].Value;
-                if (!endTimes.Contains(item) &&
-                    XLData.xlRange[4][i].Value == room &&
-                    XLData.xlRange[2][i].Value == bldg)
-                { endTimes.Add(item); }
-            }
-            return endTimes;
-        }
-
-
-        static public List<List<string>> BuildRoomCodes()
-        {
-            List<List<string>> outputList = new List<List<string>>();
-            string currentBldg;
-            List<string> currentRoomList = new List<string>();
-            for (int _code = 0; _code < bldgCodes.Count(); _code++)
-            {
-                currentBldg = bldgCodes[_code];
-                currentRoomList = null;
-                currentRoomList = GatherRoomCodes(currentBldg);
-                outputList.Add(currentRoomList);
-                Console.WriteLine($"Compiled rooms for {currentBldg}");
+                var cell = data.Cell(row, 2).GetValue<string>();
+                if (!outputList.Contains(cell)) { outputList.Add(cell); }
             }
             return outputList;
         }
 
+        static public void PrintBldgCodes()
+        {
+            bldgCodes.ForEach(code => Console.Write(code + " "));
+            Console.WriteLine("\n");
+        }
+
+        static public List<string> GatherRoomCodes(string bldg)
+        {
+            List<string> outputList = new();
+            for (int row = 2; row < rowCount; row++)
+            {
+                var cell = data.Cell(row, 4).GetValue<string>();
+                if (!outputList.Contains(cell) &&
+                    data.Cell(row, 2).GetValue<string>() == bldg) 
+                { outputList.Add(cell); }
+            }
+            return outputList;
+        }
+
+        static public void PrintRoomCodes(string currentBldg)
+        {
+            int bldgIndex = bldgCodes.IndexOf(currentBldg);
+            GatherRoomCodes(bldgCodes[bldgIndex]).ForEach(item => Console.Write(item + " "));
+        }
+
+        static public List<string> GatherBeginTimes(string bldg, string room, string day)
+        {
+            List<string> outputList = new();
+            for (int row = 2; row < rowCount; row++)
+            {
+                var cell = data.Cell(row, 6).GetValue<string>();
+                if (!outputList.Contains(cell) &&
+                    data.Cell(row, 2).GetValue<string>() == bldg &&
+                    data.Cell(row, 4).GetValue<string>() == room &&
+                    data.Cell(row, 5).GetValue<string>().Contains(day))
+                { outputList.Add(cell); }
+            }
+            outputList = FormatTime(outputList);
+            return outputList;
+        }
+
+        static public void PrintBeginTimes(string currentBldg, string currentRoom, string day)
+        {
+            int bldgIndex = bldgCodes.IndexOf(currentBldg);
+            List<string> rooms = GatherRoomCodes(currentBldg);
+            int roomIndex = rooms.IndexOf(currentRoom);
+            GatherBeginTimes(bldgCodes[bldgIndex], rooms[roomIndex], day).ForEach(item => Console.Write(item + " "));
 
 
-        //static public List<List<string>> BuildRoomCodes()
-        //{
-        //    List<List<string>> outputList;
-        //    List<string> currentList;
-        //    foreach (var item in bldgCodes)
-        //    {
-        //        currentList = null;
-        //        for (int i = 2; i < XLData.rowCount; i++)
-        //        {
-        //            string room = XLData.xlRange[4][i].Value;
-        //            if (XLData.xlRange[2][i].Value == item && !currentList.Contains(item)) { currentList.Add(room); }
-        //        }
-        //        outputList.Add(currentList);
-        //    }
-        //    return outputList;
-        //}
+
+        }
+
+        static public List<string> GatherEndTimes(string bldg, string room, string day)
+        {
+            List<string> outputList = new();
+            for (int row = 2; row < rowCount; row++)
+            {
+                var cell = data.Cell(row, 7).GetValue<string>();
+                if (!outputList.Contains(cell) &&
+                    data.Cell(row, 2).GetValue<string>() == bldg &&
+                    data.Cell(row, 4).GetValue<string>() == room &&
+                    data.Cell(row, 5).GetValue<string>().Contains(day))
+                { outputList.Add(cell); }
+            }
+            outputList = FormatTime(outputList);
+            return outputList;
+        }
+
+        static public void PrintEndTimes(string currentBldg, string currentRoom, string day)
+        {
+            int bldgIndex = bldgCodes.IndexOf(currentBldg);
+            List<string> rooms = GatherRoomCodes(currentBldg);
+            int roomIndex = rooms.IndexOf(currentRoom);
+            GatherEndTimes(bldgCodes[bldgIndex], rooms[roomIndex], day).ForEach(item => Console.Write(item + " "));
+        }
+
+        static public List<string> FormatTime(List<string> timeList)
+        {
+            List<string> outputList = new();
+            char[] delimChars = { ' ', ':' };
+            foreach (var item in timeList)
+            {
+                string nuItem;
+                string[] split = item.Split(delimChars);
+                if (split[2] == "PM")
+                {
+                    if (split[0] != "12")
+                    {
+                        int nuHour = int.Parse(split[0]);
+                        nuHour += 12;
+                        nuItem = nuHour + ":" + split[1];
+                        outputList.Add(nuItem);
+                    }
+                    else
+                    {
+                        nuItem = split[0] + ":" + split[1];
+                        outputList.Add(nuItem);
+                    }
+                }
+                else
+                {
+                    nuItem = split[0] + ":" + split[1];
+                    outputList.Add(nuItem);
+                }
+            }
+            outputList.Sort();            
+            return outputList;
+        }
+
+        static public void PrintFullTimes(List<string> beginTimes, List<string> endTimes, string bldg, string room)
+        {
+            Console.WriteLine($"Found Times for {bldg} {room}");
+            for (int i = 0; i < beginTimes.Count; i++)
+            {
+                Console.WriteLine($"{beginTimes[i]}       {endTimes[i]}");
+            }
+            Console.WriteLine($"Current System Time: {DateTime.Now.ToString("HH:mm")}\n");            
+        }
     }
 }
