@@ -18,6 +18,7 @@ namespace SurferUI
             BuildingPicker.DataSource = XLData.bldgCodes;
             DayPicker.DataSource = XLData.daysOfWeek;
             FilePathBox.Text = XLData.filePath;
+            ProfessorPicker.DataSource = XLData.professors;
         }
 
         private void BuildingPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -48,14 +49,13 @@ namespace SurferUI
 
         private void ClipboardButton_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(XLData.ReturnClipboardTimes(XLData.GatherBeginTimes(BuildingPicker.Text, RoomPicker.Text, DayPicker.Text),
-                XLData.GatherEndTimes(BuildingPicker.Text, RoomPicker.Text, DayPicker.Text), BuildingPicker.Text, RoomPicker.Text, DayPicker.Text));
+            Clipboard.SetText(OutputWindow.Text);
         }
 
         private void FilePathBox_TextChanged(object sender, EventArgs e)
         {
             XLData.filePath = FilePathBox.Text;
-            //XLData.ChangeSpreadSheet();
+            XLData.ChangeSpreadSheet();
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
@@ -81,6 +81,18 @@ namespace SurferUI
             {
                 FilePathBox.Text = openFileDialog1.FileName;
             }
+            XLData.filePath = FilePathBox.Text;
+            XLData.ChangeSpreadSheet();
+        }
+
+        private void ProfessorPicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ProfessorButton_Click(object sender, EventArgs e)
+        {
+            OutputWindow.Text = XLData.ReturnProfessor(ProfessorPicker.Text);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace SurferUI
             {"U"},
 
         };
+        static public List<string> professors = new();
         static public string filePath;
 
 
@@ -149,6 +150,39 @@ namespace SurferUI
             return outputList;
         }
 
+        static public List<string> GatherProfessors()
+        {
+            List<string> outputList = new();
+            for (int row = 2; row < rowCount; row++)
+            {
+                var cell = data.Cell(row, 13).GetValue<string>();
+                if (!outputList.Contains(cell))
+                { outputList.Add(cell); }
+            }
+            outputList.Sort();
+            return outputList;
+        }
+
+        static public string ReturnProfessor(string profSearch)
+        {
+            string outputString = "";
+            outputString += "Professor Class Schedule:\n";
+            for (int row = 2; row < rowCount; row++)
+            {
+                var bldg = data.Cell(row, 2).GetValue<string>();
+                var room = data.Cell(row, 4).GetValue<string>();
+                var beginTime = data.Cell(row, 6).GetValue<string>();
+                var endTime = data.Cell(row, 7).GetValue<string>();
+                var day = data.Cell(row, 5).GetValue<string>();
+                var professor = data.Cell(row, 13).GetValue<string>();
+                if (profSearch == professor )
+                {
+                    outputString += $"{bldg}   {room}   {beginTime}   {endTime}   {day}\n";
+                }
+            }
+            return outputString;
+        }
+
         static public string ReturnFullTimes(List<string> beginTimes, List<string> endTimes, string bldg, string room)
         {
             string outputText = "";
@@ -188,15 +222,17 @@ namespace SurferUI
 
         static public void ChangeSpreadSheet()
         {
-            XLData.data.Delete();
-            using var wbook = new XLWorkbook(XLData.filePath);
+            
+            var wbook = new XLWorkbook(filePath);
             //Gives XLData the correct worksheet
-            XLData.data = wbook.Worksheet(1);
+            data = wbook.Worksheet(1);
 
             //Uses data variable to fill in sheet parameters and variables
-            XLData.rowCount = XLData.data.LastRowUsed().RowNumber();
-            XLData.colCount = XLData.data.LastColumnUsed().ColumnNumber();
-            XLData.bldgCodes = XLData.GatherBldgCodes();
+            rowCount = data.LastRowUsed().RowNumber();
+            colCount = data.LastColumnUsed().ColumnNumber();
+            bldgCodes = GatherBldgCodes();
+            professors = GatherProfessors();
+
         }
 
 

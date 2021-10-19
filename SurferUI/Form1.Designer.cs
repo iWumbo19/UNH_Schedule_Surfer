@@ -39,6 +39,13 @@ namespace SurferUI
             this.ClipboardButton = new System.Windows.Forms.Button();
             this.FilePathBox = new System.Windows.Forms.TextBox();
             this.BrowseButton = new System.Windows.Forms.Button();
+            this.ProfessorPicker = new System.Windows.Forms.ComboBox();
+            this.ProfessorButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BuildingPicker
@@ -54,7 +61,7 @@ namespace SurferUI
             // OutputWindow
             // 
             this.OutputWindow.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.OutputWindow.Location = new System.Drawing.Point(12, 102);
+            this.OutputWindow.Location = new System.Drawing.Point(12, 162);
             this.OutputWindow.Name = "OutputWindow";
             this.OutputWindow.Size = new System.Drawing.Size(507, 371);
             this.OutputWindow.TabIndex = 1;
@@ -83,6 +90,7 @@ namespace SurferUI
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button1.Location = new System.Drawing.Point(435, 73);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(84, 23);
@@ -97,7 +105,7 @@ namespace SurferUI
             // 
             // ClipboardButton
             // 
-            this.ClipboardButton.Location = new System.Drawing.Point(178, 479);
+            this.ClipboardButton.Location = new System.Drawing.Point(179, 539);
             this.ClipboardButton.Name = "ClipboardButton";
             this.ClipboardButton.Size = new System.Drawing.Size(173, 23);
             this.ClipboardButton.TabIndex = 5;
@@ -107,7 +115,7 @@ namespace SurferUI
             // 
             // FilePathBox
             // 
-            this.FilePathBox.Location = new System.Drawing.Point(12, 24);
+            this.FilePathBox.Location = new System.Drawing.Point(12, 27);
             this.FilePathBox.Name = "FilePathBox";
             this.FilePathBox.Size = new System.Drawing.Size(417, 23);
             this.FilePathBox.TabIndex = 6;
@@ -115,7 +123,7 @@ namespace SurferUI
             // 
             // BrowseButton
             // 
-            this.BrowseButton.Location = new System.Drawing.Point(436, 24);
+            this.BrowseButton.Location = new System.Drawing.Point(435, 25);
             this.BrowseButton.Name = "BrowseButton";
             this.BrowseButton.Size = new System.Drawing.Size(83, 23);
             this.BrowseButton.TabIndex = 7;
@@ -123,11 +131,83 @@ namespace SurferUI
             this.BrowseButton.UseVisualStyleBackColor = true;
             this.BrowseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
+            // ProfessorPicker
+            // 
+            this.ProfessorPicker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ProfessorPicker.FormattingEnabled = true;
+            this.ProfessorPicker.Location = new System.Drawing.Point(12, 123);
+            this.ProfessorPicker.Name = "ProfessorPicker";
+            this.ProfessorPicker.Size = new System.Drawing.Size(276, 23);
+            this.ProfessorPicker.TabIndex = 8;
+            this.ProfessorPicker.SelectedIndexChanged += new System.EventHandler(this.ProfessorPicker_SelectedIndexChanged);
+            // 
+            // ProfessorButton
+            // 
+            this.ProfessorButton.Location = new System.Drawing.Point(435, 123);
+            this.ProfessorButton.Name = "ProfessorButton";
+            this.ProfessorButton.Size = new System.Drawing.Size(84, 23);
+            this.ProfessorButton.TabIndex = 9;
+            this.ProfessorButton.Text = "Search";
+            this.ProfessorButton.UseVisualStyleBackColor = true;
+            this.ProfessorButton.Click += new System.EventHandler(this.ProfessorButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(114, 15);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Current Spreadsheet";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 57);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 15);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Building";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(151, 57);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 15);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Room";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(292, 57);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(27, 15);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Day";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(11, 107);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 15);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Professors";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(533, 510);
+            this.ClientSize = new System.Drawing.Size(533, 574);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ProfessorButton);
+            this.Controls.Add(this.ProfessorPicker);
             this.Controls.Add(this.BrowseButton);
             this.Controls.Add(this.FilePathBox);
             this.Controls.Add(this.ClipboardButton);
@@ -157,6 +237,13 @@ namespace SurferUI
         private System.Windows.Forms.Button ClipboardButton;
         private System.Windows.Forms.TextBox FilePathBox;
         private System.Windows.Forms.Button BrowseButton;
+        private System.Windows.Forms.ComboBox ProfessorPicker;
+        private System.Windows.Forms.Button ProfessorButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
 

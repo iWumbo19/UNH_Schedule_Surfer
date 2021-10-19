@@ -19,7 +19,7 @@ namespace SurferUI
 
             //Opens Spreadsheet
             XLData.filePath = Path.Combine(Environment.CurrentDirectory, "schedule.xlsx");
-            using var wbook = new XLWorkbook(XLData.filePath);
+            var wbook = new XLWorkbook(XLData.filePath);
             //Gives XLData the correct worksheet
             XLData.data = wbook.Worksheet(1);
 
@@ -27,6 +27,7 @@ namespace SurferUI
             XLData.rowCount = XLData.data.LastRowUsed().RowNumber();
             XLData.colCount = XLData.data.LastColumnUsed().ColumnNumber();
             XLData.bldgCodes = XLData.GatherBldgCodes();
+            XLData.professors = XLData.GatherProfessors();
 
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
