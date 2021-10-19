@@ -175,9 +175,10 @@ namespace SurferUI
                 var endTime = data.Cell(row, 7).GetValue<string>();
                 var day = data.Cell(row, 5).GetValue<string>();
                 var professor = data.Cell(row, 13).GetValue<string>();
+                var course = data.Cell(row, 10).GetValue<string>();
                 if (profSearch == professor )
                 {
-                    outputString += $"{bldg}   {room}   {beginTime}   {endTime}   {day}\n";
+                    outputString += $"{bldg}   {room}   {beginTime}   {endTime}   {day}   {course}\n";
                 }
             }
             return outputString;
